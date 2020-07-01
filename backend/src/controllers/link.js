@@ -4,7 +4,7 @@ const { Link } = require("../models");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const AccountId = 1;
+  const { AccountId } = req;
   const links = await Link.findAll({ where: { AccountId } });
   if (!links) return res.jsonCodeNotFound();
   return res.jsonOK(links);
@@ -12,14 +12,14 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const AccountId = 1;
+  const { AccountId } = req;
   const link = await Link.findOne({ where: { id, AccountId } });
   if (!link) return res.jsonCodeNotFound();
   return res.jsonOK(link);
 });
 
 router.post("/", async (req, res) => {
-  const AccountId = 1;
+  const { AccountId } = req;
   const { label, url, isSocial } = req.body;
   const image = "";
 
@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  const AccountId = 1;
+  const { AccountId } = req;
   const { id } = req.params;
   const { body } = req;
   const fields = ["label", "url", "isSocial"];
@@ -49,7 +49,7 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
-  const AccountId = 1;
+  const { AccountId } = req;
   const link = await Link.findOne({ where: { id, AccountId } });
   if (!link) return res.jsonCodeNotFound();
   await link.destroy();

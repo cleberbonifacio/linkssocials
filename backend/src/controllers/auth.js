@@ -4,7 +4,12 @@ const { Account } = require("../models");
 const { accountSignUp, accountSignIn } = require("../validators/account");
 const { getMessage } = require("../helpers/validator");
 
-const { generateJwt, generateRefreshJwt } = require("../helpers/jwt");
+const {
+  generateJwt,
+  generateRefreshJwt,
+  verifyRefreshJwt,
+  getTokenFromHeaders,
+} = require("../helpers/jwt");
 
 const router = express.Router();
 
@@ -17,8 +22,13 @@ router.post("/sign-in", accountSignIn, async (req, res) => {
   const match = account ? bcrypt.compareSync(password, account.password) : null;
   if (!match)
     return res.jsonBadRequest(null, getMessage("account.signin.invalid"));
+
   const token = generateJwt({ id: account.id });
-  const refreshToken = generateRefreshJwt({ id: account.id });
+  const refreshToken = generateRefreshJwt({
+    id: account.id,
+    version: account.jwtVersion,
+  });
+
   return res.jsonOK(account, getMessage("account.signin.success"), {
     token,
     refreshToken,
@@ -40,12 +50,39 @@ router.post("/sign-up", accountSignUp, async (req, res) => {
   });
 
   const token = generateJwt({ id: newAccount.id });
-  const refreshToken = generateRefreshJwt({ id: newAccount.id });
+  const refreshToken = generateRefreshJwt({
+    id: newAccount.id,
+    version: newAccount.jwtVersion,
+  });
 
   return res.jsonOK(newAccount, getMessage("account.signup.success"), {
     token,
     refreshToken,
   });
+});
+
+router.post("/refresh", async (req, res) => {
+  const token = getTokenFromHeaders(req.headers);
+
+  if (!token) return res.jsonCodeUnauthorized(null, "Invalid Token");
+
+  try {
+    const decoded = verifyRefreshJwt(token);
+    const account = await Account.findByPk(decoded.id);
+
+    if (!account) return res.jsonCodeUnauthorized(null, "Invalid Token");
+
+    if (decoded.version !== account.jwtVersion) {
+      return res.jsonCodeUnauthorized(null, "Invalid Token");
+    }
+
+    const meta = {
+      token: generateJwt({ id: account.id }),
+    };
+    return res.jsonOK(null, null, meta);
+  } catch (error) {
+    return res.jsonCodeUnauthorized(null, "Invalid Token");
+  }
 });
 
 module.exports = router;
