@@ -1,23 +1,44 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { signUp } from "./SignUpActions";
 
-const SignUp = () => {
+const SignUp = (props) => {
+  const { signUp, account } = props;
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+
+    signUp(data);
+  };
+
+  if (account) {
+    return <Redirect to="/manage/links" />;
+  }
+
   return (
     <div className="container h-100 pt5">
       <h1>Sign In</h1>
       <div className="d-flex flex-column h-100">
-        <form action="">
+        <form onSubmit={submitHandler}>
           <div className="form-group">
             <label> E-mail</label>
-            <input type="text" className="form-control" />
+            <input type="text" className="form-control" name="email" />
           </div>
           <div className="form-group">
             <label> Password</label>
-            <input type="password" className="form-control" />
+            <input type="password" className="form-control" name="password" />
           </div>
           <div className="form-group">
             <label> Password Confirmation</label>
-            <input type="password" className="form-control" />
+            <input
+              type="password"
+              className="form-control"
+              name="password_confirmation"
+            />
           </div>
           <div>
             <button className="btn btn-primary btn-round">Submit</button>
@@ -32,4 +53,8 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+const mapStateToProps = (state) => {
+  return { account: state.signUp.account };
+};
+
+export default connect(mapStateToProps, { signUp })(SignUp);
