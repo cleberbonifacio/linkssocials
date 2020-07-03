@@ -3,6 +3,11 @@ import { apiPost } from "../helpers/api";
 export const SIGN_UP = "SIGN_UP";
 export const SIGN_IN = "SIGN_IN";
 export const SIGN_OUT = "SIGN_IN";
+export const INIT_ACCOUNT = "INIT_ACCOUNT";
+
+export const initAccount = () => {
+  return { type: INIT_ACCOUNT, payload: {} };
+};
 
 export const signUp = (data) => {
   const payload = apiPost("/auth/sign-up", data);

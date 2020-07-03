@@ -5,11 +5,18 @@ import {
   removeAccount,
   removeRefreshToken,
   removeToken,
+  getAccount,
 } from "../helpers/account";
-import { SIGN_IN, SIGN_UP, SIGN_OUT } from "../actions/AccountActions";
+import {
+  SIGN_IN,
+  SIGN_UP,
+  SIGN_OUT,
+  INIT_ACCOUNT,
+} from "../actions/AccountActions";
 
 const initialState = {
   account: null,
+  accountInit: null,
 };
 
 export default function (state = initialState, action) {
@@ -33,7 +40,11 @@ export default function (state = initialState, action) {
       removeAccount(account);
       removeToken(token);
       removeRefreshToken(refreshToken);
-      return { ...initialState, account: null };
+      return { ...state, account: null };
+    case INIT_ACCOUNT:
+      const accountInit = getAccount();
+      return { ...state, accountInit };
+
     default:
       return state;
   }
