@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 const FormGroup = (props) => {
-  const [value, setValue] = useState("");
   const { data, name, label, type } = props;
+  const [value, setValue] = useState("");
 
   useEffect(() => {
     const initialValue = data && data[name] ? data[name] : undefined;
@@ -23,7 +23,7 @@ const FormGroup = (props) => {
 
   return (
     <div className="form-group">
-      <label> {label}</label>
+      <label>{label}</label>
       <input className="form-control" {...inputProps} />
     </div>
   );

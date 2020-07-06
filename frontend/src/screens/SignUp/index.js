@@ -6,12 +6,9 @@ import { getFormData } from "../../helpers/form";
 
 const SignUp = (props) => {
   const { signUp, account } = props;
-
   const submitHandler = (e) => {
     e.preventDefault();
-
     const data = getFormData(e);
-
     signUp(data);
   };
 
@@ -20,20 +17,20 @@ const SignUp = (props) => {
   }
 
   return (
-    <div className="container h-100 pt5">
+    <div className="container h-100 pt-5">
       <h1>Sign Up</h1>
       <div className="d-flex flex-column h-100">
         <form onSubmit={submitHandler}>
           <div className="form-group">
-            <label> E-mail</label>
+            <label>Email</label>
             <input type="text" className="form-control" name="email" />
           </div>
           <div className="form-group">
-            <label> Password</label>
+            <label>Password</label>
             <input type="password" className="form-control" name="password" />
           </div>
           <div className="form-group">
-            <label> Password Confirmation</label>
+            <label>Password Confirmation</label>
             <input
               type="password"
               className="form-control"
@@ -45,7 +42,7 @@ const SignUp = (props) => {
           </div>
         </form>
         <div className="container text-center fixed-bottom pb-5">
-          <div className="text-muted"> Already have an Account?</div>
+          <div className="text-muted">Already have an Account?</div>
           <Link to="/sign-in">Sign In</Link>
         </div>
       </div>

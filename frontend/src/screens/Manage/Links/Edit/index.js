@@ -1,17 +1,27 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
 import Layout from "../../../Layouts/Manage";
 import FormGroup from "../../../../components/FormGroup";
 import FormCheck from "../../../../components/FormCheck";
-import { linkGet, linkUpdate } from "../../../../actions/LinkActions";
-import { getFormData } from "../../../../helpers/form";
 
-const Edit = ({ link, linkGet, linkUpdate }) => {
+import {
+  linkGet,
+  linkUpdate,
+  linkClear,
+} from "../../../../actions/LinkActions";
+import { getFormData } from "../../../../helpers/form";
+import { connect } from "react-redux";
+
+const Edit = ({ link, linkGet, linkUpdate, linkClear }) => {
   const { id } = useParams();
+
   useEffect(() => {
     linkGet(id);
-  }, [id, linkGet]);
+
+    return () => {
+      linkClear();
+    };
+  }, [id, linkGet, linkClear]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -27,7 +37,6 @@ const Edit = ({ link, linkGet, linkUpdate }) => {
           <FormGroup label="Label" name="label" data={link} type="text" />
           <FormGroup label="Url" name="url" data={link} type="text" />
           <FormCheck label="Is Social" name="isSocial" data={link} />
-
           <div>
             <button className="btn btn-primary btn-round">Submit</button>
           </div>
@@ -36,11 +45,12 @@ const Edit = ({ link, linkGet, linkUpdate }) => {
     </Layout>
   );
 };
-
 const mapStateToProps = (state) => {
   return {
     link: state.link.link,
   };
 };
 
-export default connect(mapStateToProps, { linkGet, linkUpdate })(Edit);
+export default connect(mapStateToProps, { linkGet, linkUpdate, linkClear })(
+  Edit
+);

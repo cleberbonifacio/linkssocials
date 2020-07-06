@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 const FormCheck = (props) => {
-  const [isChecked, setIsChecked] = useState(null);
   const { data, name, label } = props;
+  const [isChecked, setIsChecked] = useState(null);
 
   useEffect(() => {
     const initialValue = data && data[name] ? data[name] : undefined;
@@ -22,10 +22,11 @@ const FormCheck = (props) => {
   };
 
   return (
-    <div className="form-group form-check">
+    <div className="from-group form-check">
       <label className="form-check-label">
         <input {...inputProps} />
-        <span className="form-check-sign">{label}</span>
+        <span className="form-check-sign"></span>
+        {label}
       </label>
     </div>
   );

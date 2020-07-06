@@ -22,17 +22,18 @@ const Create = ({ link, linkCreate }) => {
       <div>
         <form onSubmit={submitHandler}>
           <div className="form-group">
-            <label> Label</label>
+            <label>Label</label>
             <input type="text" className="form-control" name="label" />
           </div>
           <div className="form-group">
-            <label> Url</label>
+            <label>Url</label>
             <input type="text" className="form-control" name="url" />
           </div>
-          <div className="form-group form-check">
+          <div className="from-group form-check">
             <label className="form-check-label">
               <input type="checkbox" name="isSocial" />
-              <span className="form-check-sign">Is Social</span>
+              <span className="form-check-sign"></span>
+              Is Social
             </label>
           </div>
           <div>
