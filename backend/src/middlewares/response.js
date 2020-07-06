@@ -8,76 +8,61 @@ const STATUS_CODE_NOT_FOUND = 404;
 const STATUS_CODE_SERVER_ERROR = 500;
 
 const jsonOK = function (data, message, metadata) {
-  message = message ? message : getMessage("response.json.ok");
+  const status = STATUS_CODE_OK;
+  message = message ? message : getMessage("response.json_ok");
   metadata = metadata ? metadata : {};
 
-  this.status(STATUS_CODE_OK);
+  this.status(status);
   this.type(TYPE_JSON);
-  return this.json({ message, data, metadata, status: STATUS_CODE_OK });
+  return this.json({ message, data, metadata, status: status });
 };
 
 const jsonBadRequest = function (data, message, metadata) {
-  message = message ? message : getMessage("response.json.bad_request");
+  const status = STATUS_CODE_BAD_REQUEST;
+  message = message ? message : getMessage("response.json_bad_request");
   metadata = metadata ? metadata : {};
 
-  this.status(STATUS_CODE_BAD_REQUEST);
+  this.status(status);
   this.type(TYPE_JSON);
-  return this.json({
-    message,
-    data,
-    metadata,
-    status: STATUS_CODE_BAD_REQUEST,
-  });
+  return this.json({ message, data, metadata, status: status });
 };
 
-const jsonCodeUnauthorized = function (data, message, metadata) {
-  message = message ? message : getMessage("response.json.unauthorized");
+const jsonUnauthorized = function (data, message, metadata) {
+  const status = STATUS_CODE_UNAUTHORIZED;
+  message = message ? message : getMessage("response.json_unauthoriazed");
   metadata = metadata ? metadata : {};
 
-  this.status(STATUS_CODE_UNAUTHORIZED);
+  this.status(status);
   this.type(TYPE_JSON);
-  return this.json({
-    message,
-    data,
-    metadata,
-    status: STATUS_CODE_UNAUTHORIZED,
-  });
+  return this.json({ message, data, metadata, status: status });
 };
 
-const jsonCodeNotFound = function (data, message, metadata) {
-  message = message ? message : getMessage("response.json.not_found");
+const jsonNotFound = function (data, message, metadata) {
+  const status = STATUS_CODE_NOT_FOUND;
+  message = message ? message : getMessage("response.json_not_found");
   metadata = metadata ? metadata : {};
 
-  this.status(STATUS_CODE_NOT_FOUND);
+  this.status(status);
   this.type(TYPE_JSON);
-  return this.json({
-    message,
-    data,
-    metadata,
-    status: STATUS_CODE_NOT_FOUND,
-  });
+  return this.json({ message, data, metadata, status: status });
 };
 
-const jsonCodeServerError = function (data, message, metadata) {
-  message = message ? message : getMessage("response.json.server_error");
+const jsonServerError = function (data, message, metadata) {
+  const status = STATUS_CODE_SERVER_ERROR;
+  message = message ? message : getMessage("response.json_server_error");
   metadata = metadata ? metadata : {};
 
-  this.status(STATUS_CODE_SERVER_ERROR);
+  this.status(status);
   this.type(TYPE_JSON);
-  return this.json({
-    message,
-    data,
-    metadata,
-    status: STATUS_CODE_SERVER_ERROR,
-  });
+  return this.json({ message, data, metadata, status: status });
 };
-
 const response = (req, res, next) => {
   res.jsonOK = jsonOK;
   res.jsonBadRequest = jsonBadRequest;
-  res.jsonCodeUnauthorized = jsonCodeUnauthorized;
-  res.jsonCodeNotFound = jsonCodeNotFound;
-  res.jsonCodeServerError = jsonCodeServerError;
+  res.jsonUnauthorized = jsonUnauthorized;
+  res.jsonNotFound = jsonNotFound;
+  res.jsonServerError = jsonServerError;
+
   next();
 };
 

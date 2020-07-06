@@ -20,7 +20,7 @@ app.use("/auth", authController);
 app.use("/link", linkController);
 
 app.get("/", (req, res) => {
-  return res.json("api runnning...");
+  return res.json("Api running...");
 });
 
 db.sequelize.sync().then(() => {

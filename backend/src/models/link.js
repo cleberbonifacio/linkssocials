@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Link.associte = (models) => {
+  Link.associate = (models) => {
     Link.belongsTo(models.Account, { foreignKey: "accountId" });
   };
 
