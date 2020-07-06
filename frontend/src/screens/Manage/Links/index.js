@@ -3,12 +3,27 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import Layout from "../../Layouts/Manage";
-import { linkList } from "../../../actions/LinkActions";
+import {
+  linkList,
+  setLinkToRemove,
+  linkRemove,
+} from "../../../actions/LinkActions";
 
-const Links = ({ links, linkList }) => {
+const Links = ({
+  links,
+  linkRemove,
+  linkList,
+  linkToRemove,
+  setLinkToRemove,
+}) => {
   useEffect(() => {
     linkList();
   }, [linkList]);
+
+  const cancelDelete = (e) => setLinkToRemove(null);
+
+  const confirmDelete = (e) => (linkToRemove ? linkRemove(linkToRemove) : null);
+
   return (
     <Layout>
       <div className="row">
@@ -23,9 +38,14 @@ const Links = ({ links, linkList }) => {
       </div>
       {links && links.length
         ? links.map((link) => {
+            const deleteClick = (e) => setLinkToRemove(link);
+            const border =
+              linkToRemove && linkToRemove.id === link.id
+                ? "border border-danger rounded"
+                : "border border-transparent";
             return (
               <div
-                className="pb-2 pt-2 pl-3 pr-3 d-flex flex-row justify-content-between"
+                className={`pb-2 pt-2 pl-3 pr-3 d-flex flex-row justify-content-between ${border}`}
                 key={link.id}
               >
                 <div className="pr-3">
@@ -36,19 +56,43 @@ const Links = ({ links, linkList }) => {
                   <span className="text-primary clearfix">{link.url}</span>
                 </div>
                 <div className="ml-auto p-2 clearfix">
-                  <Link to={`/manage/links/edit/${link.id}`}>Edit</Link>
-
-                  <span>Delete</span>
+                  <Link to={`/manage/links/edit/${link.id}`}>Edit </Link>
+                  <button className="bbtn btn-clear" onClick={deleteClick}>
+                    Delete
+                  </button>
                 </div>
               </div>
             );
           })
         : null}
+
+      {linkToRemove ? (
+        <div className="alert alert-danger rounded float-center shadow-bold">
+          <h4 className="alert-heading">Delete confirmation!</h4>
+          <p>Are you sure you want to delete, this action cannot be undone.</p>
+          <hr />
+          <div className="d-flex justify-content-between">
+            <button className="btn btn-outline-light" onClick={cancelDelete}>
+              Cancel
+            </button>
+            <button className="btn btn-danger" onClick={confirmDelete}>
+              Delete
+            </button>
+          </div>
+        </div>
+      ) : null}
     </Layout>
   );
 };
 
 const mapStateToProps = (state) => {
-  return { links: state.link.links };
+  return {
+    links: state.link.links,
+    linkToRemove: state.link.linkToRemove,
+  };
 };
-export default connect(mapStateToProps, { linkList })(Links);
+export default connect(mapStateToProps, {
+  linkList,
+  setLinkToRemove,
+  linkRemove,
+})(Links);
